@@ -46,6 +46,16 @@ function mapWorkTypes(types: string[]): WorkType[] {
   return types.map((t) => map[t]).filter(Boolean);
 }
 
+/** Translate English restriction strings to Chinese */
+const RESTRICTION_ZH: Record<string, string> = {
+  "Company must be established outside Spain": "公司必须在西班牙境外注册",
+  "Service-based remuneration required": "须为服务性报酬",
+  "Spanish-source income capped at 20%": "西班牙来源收入不得超过 20%",
+};
+function translateRestriction(en: string): string {
+  return RESTRICTION_ZH[en] ?? en;
+}
+
 /** Duration { value, unit } → months */
 function toMonths(val: number, unit: string): number {
   if (unit === "year" || unit === "years") return val * 12;
@@ -279,7 +289,8 @@ function transform(raw: any, enrich: CountryEnrichment): CountryPolicy {
   // If business_owner_conditions.allowed is true, add company_owner (with conditions)
   const boc = visa?.business_owner_conditions;
   const businessOwnerConditional = boc?.allowed === true;
-  const businessOwnerRestrictions: string[] = boc?.restrictions ?? [];
+  const rawRestrictions: string[] = boc?.restrictions ?? [];
+  const businessOwnerRestrictions: string[] = rawRestrictions.map((r: string) => translateRestriction(r));
   if (businessOwnerConditional && !allowedWorkTypes.includes("company_owner")) {
     allowedWorkTypes.push("company_owner");
   }
