@@ -56,15 +56,16 @@ function Radio({
   onChange: (v: string) => void;
 }) {
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2">
       {options.map((o) => (
         <label
           key={o.value}
-          className={`cursor-pointer rounded-lg border px-4 py-2.5 text-sm transition-all select-none
+          className={`cursor-pointer rounded-lg border px-3 py-3 sm:px-4 sm:py-2.5 text-sm text-center
+            transition-all select-none min-h-[44px] flex items-center justify-center
             ${
               value === o.value
                 ? "border-brand-500 bg-brand-50 text-brand-700 font-medium shadow-sm"
-                : "border-slate-200 bg-white text-slate-600 hover:border-slate-300"
+                : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 active:bg-slate-50"
             }`}
         >
           <input
@@ -96,15 +97,16 @@ function Checkbox({
       selected.includes(v) ? selected.filter((s) => s !== v) : [...selected, v]
     );
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
       {options.map((o) => (
         <label
           key={o.value}
-          className={`cursor-pointer rounded-lg border px-4 py-2.5 text-sm transition-all select-none
+          className={`cursor-pointer rounded-lg border px-3 py-3 sm:px-4 sm:py-2.5 text-sm
+            transition-all select-none min-h-[44px] flex items-center
             ${
               selected.includes(o.value)
                 ? "border-brand-500 bg-brand-50 text-brand-700 font-medium shadow-sm"
-                : "border-slate-200 bg-white text-slate-600 hover:border-slate-300"
+                : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 active:bg-slate-50"
             }`}
         >
           <input
@@ -113,6 +115,9 @@ function Checkbox({
             onChange={() => toggle(o.value)}
             className="sr-only"
           />
+          <span className="mr-2 text-xs">
+            {selected.includes(o.value) ? "☑" : "☐"}
+          </span>
           {o.label}
         </label>
       ))}
@@ -124,7 +129,7 @@ function Q({ label, sub, children }: { label: string; sub?: string; children: Re
   return (
     <div className="space-y-3">
       <div>
-        <p className="font-medium text-slate-800">{label}</p>
+        <p className="font-medium text-slate-800 text-[15px] leading-snug">{label}</p>
         {sub && <p className="text-xs text-slate-400 mt-0.5">{sub}</p>}
       </div>
       {children}
@@ -134,10 +139,10 @@ function Q({ label, sub, children }: { label: string; sub?: string; children: Re
 
 /* ──────── sections ──────── */
 const SECTIONS = [
-  { title: "身份与停留计划", icon: "🛂" },
+  { title: "身份与停留", icon: "🛂" },
   { title: "工作与收入", icon: "💼" },
   { title: "合规能力", icon: "📋" },
-  { title: "偏好与规划", icon: "🎯" },
+  { title: "偏好规划", icon: "🎯" },
 ];
 
 /* ──────── main ──────── */
@@ -162,19 +167,19 @@ export default function Questionnaire({
   };
 
   return (
-    <div className="mx-auto max-w-2xl">
+    <div className="mx-auto max-w-2xl px-0">
       {/* progress */}
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-3">
+      <div className="mb-6 sm:mb-8">
+        <div className="flex items-center justify-between mb-3 gap-1">
           {SECTIONS.map((s, i) => (
             <div
               key={i}
-              className={`flex items-center gap-1.5 text-xs font-medium transition-colors ${
+              className={`flex items-center gap-1 sm:gap-1.5 text-[11px] sm:text-xs font-medium transition-colors ${
                 i <= step ? "text-brand-600" : "text-slate-300"
               }`}
             >
               <span
-                className={`w-7 h-7 rounded-full flex items-center justify-center text-sm ${
+                className={`w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-xs sm:text-sm shrink-0 ${
                   i < step
                     ? "bg-brand-600 text-white"
                     : i === step
@@ -184,7 +189,7 @@ export default function Questionnaire({
               >
                 {i < step ? "✓" : i + 1}
               </span>
-              <span className="hidden sm:inline">{s.title}</span>
+              <span className="hidden xs:inline sm:inline truncate">{s.title}</span>
             </div>
           ))}
         </div>
@@ -197,8 +202,8 @@ export default function Questionnaire({
       </div>
 
       {/* card */}
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 sm:p-8 space-y-7">
-        <h2 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 sm:p-6 md:p-8 space-y-6 sm:space-y-7">
+        <h2 className="text-base sm:text-lg font-semibold text-slate-900 flex items-center gap-2">
           {SECTIONS[step].icon} {SECTIONS[step].title}
         </h2>
 
@@ -227,16 +232,17 @@ export default function Questionnaire({
                   value={a.has_spouse ? "yes" : "no"}
                   onChange={(v) => u("has_spouse", v === "yes")}
                 />
-                <div className="flex items-center gap-3">
-                  <span className="text-sm text-slate-600">子女人数：</span>
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <span className="text-sm text-slate-600 shrink-0">子女人数：</span>
                   {[0, 1, 2, 3].map((n) => (
                     <label
                       key={n}
-                      className={`cursor-pointer rounded-lg border w-10 h-10 flex items-center justify-center text-sm transition-all select-none
+                      className={`cursor-pointer rounded-lg border w-11 h-11 sm:w-10 sm:h-10 flex items-center justify-center
+                        text-sm transition-all select-none
                         ${
                           a.num_children === n
                             ? "border-brand-500 bg-brand-50 text-brand-700 font-medium"
-                            : "border-slate-200 bg-white text-slate-600"
+                            : "border-slate-200 bg-white text-slate-600 active:bg-slate-50"
                         }`}
                     >
                       <input
@@ -272,28 +278,61 @@ export default function Questionnaire({
         {step === 1 && (
           <>
             <Q label="4. 工作形态">
-              <Radio
-                name="work"
-                options={[
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {[
                   { label: "海外公司远程雇员", value: "overseas_remote_employee" },
                   { label: "国内公司远程雇员", value: "domestic_remote_employee" },
                   { label: "自由职业（多客户）", value: "freelancer" },
                   { label: "自有公司（股东/经营）", value: "company_owner" },
-                ]}
-                value={a.work_type}
-                onChange={(v) => u("work_type", v as WorkType)}
-              />
+                ].map((o) => (
+                  <label
+                    key={o.value}
+                    className={`cursor-pointer rounded-lg border px-3 py-3 sm:px-4 sm:py-2.5 text-sm
+                      transition-all select-none min-h-[44px] flex items-center justify-center text-center
+                      ${
+                        a.work_type === o.value
+                          ? "border-brand-500 bg-brand-50 text-brand-700 font-medium shadow-sm"
+                          : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 active:bg-slate-50"
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="work"
+                      value={o.value}
+                      checked={a.work_type === o.value}
+                      onChange={() => u("work_type", o.value as WorkType)}
+                      className="sr-only"
+                    />
+                    {o.label}
+                  </label>
+                ))}
+              </div>
             </Q>
             <Q label="5. 税前月收入（USD）" sub="用于判断是否满足各国门槛，选择最接近的区间">
-              <Radio
-                name="income"
-                options={INCOME_RANGES.map((r) => ({
-                  label: r.label,
-                  value: String(r.value),
-                }))}
-                value={String(a.monthly_income_usd)}
-                onChange={(v) => u("monthly_income_usd", Number(v))}
-              />
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                {INCOME_RANGES.map((r) => (
+                  <label
+                    key={r.value}
+                    className={`cursor-pointer rounded-lg border px-3 py-3 sm:px-4 sm:py-2.5 text-sm text-center
+                      transition-all select-none min-h-[44px] flex items-center justify-center
+                      ${
+                        a.monthly_income_usd === r.value
+                          ? "border-brand-500 bg-brand-50 text-brand-700 font-medium shadow-sm"
+                          : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 active:bg-slate-50"
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="income"
+                      value={String(r.value)}
+                      checked={a.monthly_income_usd === r.value}
+                      onChange={() => u("monthly_income_usd", r.value)}
+                      className="sr-only"
+                    />
+                    {r.label}
+                  </label>
+                ))}
+              </div>
             </Q>
             <Q label="6. 收入是否稳定？">
               <Radio
@@ -413,12 +452,12 @@ export default function Questionnaire({
         )}
 
         {/* nav */}
-        <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+        <div className="flex items-center justify-between pt-4 border-t border-slate-100 gap-3">
           <button
-            className={`px-5 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+            className={`px-4 sm:px-5 py-3 sm:py-2.5 rounded-lg text-sm font-medium transition-colors min-h-[44px] ${
               step === 0
                 ? "invisible"
-                : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                : "text-slate-600 hover:text-slate-900 hover:bg-slate-50 active:bg-slate-100"
             }`}
             onClick={() => setStep(step - 1)}
           >
@@ -426,8 +465,9 @@ export default function Questionnaire({
           </button>
           <button
             disabled={!canNext()}
-            className="px-6 py-2.5 rounded-lg text-sm font-medium bg-brand-600 text-white
-              hover:bg-brand-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
+            className="px-5 sm:px-6 py-3 sm:py-2.5 rounded-lg text-sm font-medium bg-brand-600 text-white
+              hover:bg-brand-700 active:bg-brand-800 disabled:opacity-40 disabled:cursor-not-allowed
+              transition-colors shadow-sm min-h-[44px]"
             onClick={next}
           >
             {step < 3 ? "下一步 →" : "查看推荐结果"}

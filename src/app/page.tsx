@@ -29,10 +29,10 @@ export default function Home() {
     <>
       {/* header */}
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100">
-        <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
+        <div className="max-w-5xl mx-auto px-4 h-12 sm:h-14 flex items-center justify-between">
           <button
             onClick={handleReset}
-            className="font-bold text-brand-600 tracking-tight text-lg"
+            className="font-bold text-brand-600 tracking-tight text-base sm:text-lg"
           >
             Suerte
           </button>
@@ -42,22 +42,22 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 py-8">
+      <main className="max-w-5xl mx-auto px-3 sm:px-4 py-6 sm:py-8">
         {/* ── Hero ── */}
         {view === "hero" && (
-          <div className="flex flex-col items-center justify-center min-h-[70vh] text-center">
-            <div className="relative mb-6">
+          <div className="flex flex-col items-center justify-center min-h-[65vh] sm:min-h-[70vh] text-center px-2">
+            <div className="relative mb-5 sm:mb-6">
               <div className="absolute -inset-4 bg-gradient-to-r from-brand-200/40 via-violet-200/40 to-amber-200/40 rounded-full blur-2xl" />
-              <span className="relative text-6xl">🌍</span>
+              <span className="relative text-5xl sm:text-6xl">🌍</span>
             </div>
-            <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 mb-4 leading-tight">
+            <h1 className="text-2xl sm:text-3xl md:text-5xl font-extrabold text-slate-900 mb-3 sm:mb-4 leading-tight">
               找到最适合你的
               <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-violet-600">
                 数字游民目的地
               </span>
             </h1>
-            <p className="text-slate-500 max-w-lg mb-8 leading-relaxed">
+            <p className="text-slate-500 max-w-lg mb-6 sm:mb-8 leading-relaxed text-sm sm:text-base">
               回答 14 个问题，系统将基于 10 个国家的签证政策数据，
               为你筛选评分并推荐最匹配的数字游民签证方案。
               <br />
@@ -67,16 +67,17 @@ export default function Home() {
             </p>
             <button
               onClick={() => setView("quiz")}
-              className="px-8 py-3.5 rounded-xl text-base font-semibold bg-brand-600 text-white
-                hover:bg-brand-700 shadow-lg shadow-brand-200 transition-all hover:shadow-xl hover:shadow-brand-300
-                hover:-translate-y-0.5 active:translate-y-0"
+              className="px-7 sm:px-8 py-3 sm:py-3.5 rounded-xl text-sm sm:text-base font-semibold bg-brand-600 text-white
+                hover:bg-brand-700 active:bg-brand-800 shadow-lg shadow-brand-200 transition-all
+                hover:shadow-xl hover:shadow-brand-300
+                hover:-translate-y-0.5 active:translate-y-0 min-h-[48px]"
             >
               开始测试 →
             </button>
-            <p className="text-xs text-slate-300 mt-4">约 3–5 分钟</p>
+            <p className="text-xs text-slate-300 mt-3 sm:mt-4">约 3–5 分钟</p>
 
             {/* feature badges */}
-            <div className="flex flex-wrap justify-center gap-3 mt-12">
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mt-8 sm:mt-12">
               {[
                 { icon: "🛡️", text: "政策数据可核验" },
                 { icon: "🧮", text: "五维度评分模型" },
@@ -85,7 +86,7 @@ export default function Home() {
               ].map((f) => (
                 <span
                   key={f.text}
-                  className="text-xs text-slate-500 bg-white border border-slate-100 rounded-full px-3 py-1.5 shadow-sm"
+                  className="text-[11px] sm:text-xs text-slate-500 bg-white border border-slate-100 rounded-full px-2.5 sm:px-3 py-1 sm:py-1.5 shadow-sm"
                 >
                   {f.icon} {f.text}
                 </span>
@@ -104,9 +105,11 @@ export default function Home() {
       </main>
 
       {/* footer */}
-      <footer className="border-t border-slate-100 py-6 text-center text-xs text-slate-300">
+      <footer className="border-t border-slate-100 py-5 sm:py-6 px-4 text-center text-[11px] sm:text-xs text-slate-300 leading-relaxed">
         Suerte © {new Date().getFullYear()} · 数据校验于 2026-02-07
-        · 数据置信度：中 · 不构成法律或税务建议
+        <br className="sm:hidden" />
+        <span className="hidden sm:inline"> · </span>
+        数据置信度：中 · 不构成法律或税务建议
       </footer>
     </>
   );
