@@ -62,7 +62,7 @@ export default function Home() {
               为你筛选评分并推荐最匹配的数字游民签证方案。
               <br />
               <span className="text-xs text-slate-400">
-                所有政策数据可追溯来源，不替代法律/税务建议
+                所有政策数据可追溯来源 · 税务优惠标注条件性 · 不替代法律/税务建议
               </span>
             </p>
             <button
@@ -105,8 +105,8 @@ export default function Home() {
 
       {/* footer */}
       <footer className="border-t border-slate-100 py-6 text-center text-xs text-slate-300">
-        Suerte © {new Date().getFullYear()} · 数据更新于 2026-01
-        · 不构成法律或税务建议
+        Suerte © {new Date().getFullYear()} · 数据校验于 2026-02-07
+        · 数据置信度：中 · 不构成法律或税务建议
       </footer>
     </>
   );

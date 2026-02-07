@@ -72,7 +72,8 @@ export default function ResultsPage({
       <div className="mt-10 p-4 bg-slate-50 rounded-xl border border-slate-100 text-xs text-slate-400 leading-relaxed">
         <p className="font-medium text-slate-500 mb-1">⚖️ 免责声明</p>
         <p>
-          本页面基于公开政策信息整理，不构成法律或税务建议。签证及税务规则可能更新，请在申请前核实官方信息。推荐评分仅供参考，不承诺获签结果。
+          本页面基于公开政策报告整理，所有数据标注为「中等置信度」，税务优惠多为条件性政策。
+          签证及税务规则可能更新，请在申请前核实官方最新信息并咨询专业人士。推荐评分仅供参考，不承诺获签结果。
         </p>
       </div>
 

@@ -52,6 +52,12 @@ const DIM_COLORS = [
   "bg-cyan-500",
 ];
 
+const CONFIDENCE_STYLE: Record<string, { label: string; dot: string; text: string }> = {
+  high: { label: "高置信", dot: "bg-emerald-400", text: "text-emerald-600" },
+  medium: { label: "中置信", dot: "bg-amber-400", text: "text-amber-600" },
+  low: { label: "低置信", dot: "bg-red-400", text: "text-red-600" },
+};
+
 export default function CountryCard({ r }: { r: CountryResult }) {
   const [open, setOpen] = useState(false);
   const c = r.country;
@@ -83,6 +89,7 @@ export default function CountryCard({ r }: { r: CountryResult }) {
   }
 
   const tierStyle = TIER_STYLE[r.tier ?? ""] ?? TIER_STYLE["ℹ️ 可作备选"];
+  const conf = CONFIDENCE_STYLE[c.confidence_level] ?? CONFIDENCE_STYLE.medium;
 
   return (
     <div className="bg-white rounded-xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow overflow-hidden">
@@ -108,6 +115,43 @@ export default function CountryCard({ r }: { r: CountryResult }) {
           </div>
         </div>
 
+        {/* policy tags */}
+        <div className="flex flex-wrap gap-1.5 mb-3">
+          {/* confidence badge */}
+          <span className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-slate-50 border border-slate-100 ${conf.text}`}>
+            <span className={`w-1.5 h-1.5 rounded-full ${conf.dot}`} />
+            {conf.label}
+          </span>
+
+          {/* conditional tax tag */}
+          {c.tax_policy.foreign_income_conditional && c.tax_policy.type !== "no_benefit" && (
+            <span className="text-xs px-2 py-0.5 rounded-full bg-amber-50 border border-amber-100 text-amber-600">
+              税惠需满足条件
+            </span>
+          )}
+
+          {/* family uncertain tag */}
+          {c.family_allowed === null && (
+            <span className="text-xs px-2 py-0.5 rounded-full bg-orange-50 border border-orange-100 text-orange-600">
+              家属政策待确认
+            </span>
+          )}
+
+          {/* insurance uncertain tag */}
+          {c.insurance_required === null && (
+            <span className="text-xs px-2 py-0.5 rounded-full bg-slate-50 border border-slate-100 text-slate-500">
+              保险要求待确认
+            </span>
+          )}
+
+          {/* PR path */}
+          {c.path_to_pr && !c.path_to_pr_explicit && (
+            <span className="text-xs px-2 py-0.5 rounded-full bg-violet-50 border border-violet-100 text-violet-600">
+              永居非明确保证
+            </span>
+          )}
+        </div>
+
         {/* highlights */}
         <div className="space-y-1.5 mb-3">
           {r.highlights?.map((h, i) => (
@@ -120,12 +164,24 @@ export default function CountryCard({ r }: { r: CountryResult }) {
 
         {/* risks */}
         <div className="space-y-1.5">
-          {r.risks?.map((rk, i) => (
-            <div key={i} className="flex items-start gap-2 text-sm text-amber-700">
-              <span className="text-amber-500 mt-0.5 shrink-0">⚠</span>
-              <span>{rk.text}</span>
-            </div>
-          ))}
+          {r.risks?.map((rk, i) => {
+            const sevColors = {
+              high: "text-red-700",
+              medium: "text-amber-700",
+              low: "text-slate-500",
+            };
+            const sevIcons = {
+              high: "🔴",
+              medium: "⚠",
+              low: "ℹ️",
+            };
+            return (
+              <div key={i} className={`flex items-start gap-2 text-sm ${sevColors[rk.severity]}`}>
+                <span className="mt-0.5 shrink-0 text-xs">{sevIcons[rk.severity]}</span>
+                <span>{rk.text}</span>
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -158,14 +214,73 @@ export default function CountryCard({ r }: { r: CountryResult }) {
                 />
               </div>
             ))}
-          <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-50">
-            <p className="text-xs text-slate-400">
-              税务政策：{c.tax_policy.description}
+
+          {/* tax policy detail */}
+          <div className="mt-3 pt-3 border-t border-slate-50 space-y-2">
+            <div className="flex items-start gap-2">
+              <span className="text-xs text-slate-400 shrink-0 mt-0.5">💰 税务：</span>
+              <p className="text-xs text-slate-500">{c.tax_policy.description}</p>
+            </div>
+            {c.tax_policy.foreign_income_conditional && c.tax_policy.type !== "no_benefit" && (
+              <p className="text-xs text-amber-500 ml-6">
+                ⚠ 免税/优惠为条件性政策，需满足特定条件
+              </p>
+            )}
+          </div>
+
+          {/* policy facts */}
+          <div className="mt-2 pt-2 border-t border-slate-50 grid grid-cols-2 gap-x-4 gap-y-1.5 text-xs text-slate-500">
+            <div>
+              <span className="text-slate-400">初始签证：</span>
+              {c.initial_term_months >= 12
+                ? `${Math.round(c.initial_term_months / 12)} 年`
+                : `${c.initial_term_months} 月`}
+            </div>
+            <div>
+              <span className="text-slate-400">最长居留：</span>
+              {c.max_stay_months >= 12
+                ? `${Math.round(c.max_stay_months / 12)} 年`
+                : `${c.max_stay_months} 月`}
+            </div>
+            <div>
+              <span className="text-slate-400">可续签：</span>
+              {c.renewable ? "是" : "否"}
+            </div>
+            <div>
+              <span className="text-slate-400">永居路径：</span>
+              {c.path_to_pr
+                ? c.path_to_pr_explicit
+                  ? `明确（${c.years_to_pr}年）`
+                  : "条件性"
+                : "无"}
+            </div>
+            <div>
+              <span className="text-slate-400">家属：</span>
+              {c.family_allowed === true
+                ? "可随行"
+                : c.family_allowed === null
+                ? "待确认"
+                : "不支持"}
+            </div>
+            <div>
+              <span className="text-slate-400">保险：</span>
+              {c.insurance_required === true
+                ? "必须"
+                : c.insurance_required === null
+                ? "待确认"
+                : "非必须"}
+            </div>
+          </div>
+
+          {/* source & date */}
+          <div className="flex items-center justify-between mt-3 pt-2 border-t border-slate-50">
+            <p className="text-xs text-slate-300">
+              来源：{c.source_id}
+            </p>
+            <p className="text-xs text-slate-300">
+              校验于 {c.last_verified_at}
             </p>
           </div>
-          <p className="text-xs text-slate-300">
-            数据校验于 {c.last_verified_at}
-          </p>
         </div>
       )}
     </div>

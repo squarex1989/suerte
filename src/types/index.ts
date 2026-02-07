@@ -24,6 +24,7 @@ export type InfraPref = "high" | "medium";
 export type Level = "high" | "medium" | "low";
 export type TaxType = "zero" | "exempt" | "special_regime" | "no_benefit";
 export type Timezone = "Asia" | "Europe" | "MiddleEast";
+export type ConfidenceLevel = "high" | "medium" | "low";
 
 // ---- User Answers ----
 
@@ -53,6 +54,10 @@ export interface CountryPolicy {
   flag: string;
   visa_name: string;
 
+  // Metadata & confidence
+  confidence_level: ConfidenceLevel;
+  source_id: string;
+
   // Hard thresholds
   min_income: {
     amount: number;
@@ -65,8 +70,8 @@ export interface CountryPolicy {
   };
   allowed_work_types: WorkType[];
   local_work_prohibited: boolean;
-  family_allowed: boolean;
-  insurance_required: boolean;
+  family_allowed: boolean | null;       // null = uncertain / not confirmed
+  insurance_required: boolean | null;   // null = uncertain
   education_required: boolean;
   min_experience_years: number;
   required_documents: DocumentType[];
@@ -76,11 +81,13 @@ export interface CountryPolicy {
   initial_term_months: number;
   renewable: boolean;
   path_to_pr: boolean;
+  path_to_pr_explicit: boolean;         // false = conditional / not guaranteed
   years_to_pr: number | null;
 
   tax_policy: {
     type: TaxType;
     foreign_income_exempt: boolean;
+    foreign_income_conditional: boolean; // true = exemption is conditional, not automatic
     local_rate_pct: number;
     exemption_pct: number;
     benefit_duration_years: number;

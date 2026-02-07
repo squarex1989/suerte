@@ -1,0 +1,930 @@
+[
+  {
+    "meta": {
+      "country": "Spain",
+      "local_name": "西班牙",
+      "iso_code": "ES",
+      "last_reviewed_at": "2026-02-07",
+      "confidence_level": "medium",
+      "notes": "Facts transcribed from the provided report; verify against official sources before external publication."
+    },
+    "visa_policy": {
+      "visa_name": "International Remote Work Visa/Residence",
+      "common_name": "Digital Nomad Visa",
+      "eligible_nationalities": "non-EU",
+      "eligible_worker_types": [
+        "remote_employee",
+        "freelancer"
+      ],
+      "local_client_income_limit": {
+        "exists": true,
+        "max_percentage": 20
+      }
+    },
+    "financial_requirements": {
+      "minimum_income": {
+        "amount": 2762,
+        "currency": "EUR",
+        "period": "monthly",
+        "basis": "200% of Spanish minimum wage (approx. 2025)",
+        "variable": true
+      },
+      "work_relationship_min_duration": {
+        "value": 3,
+        "unit": "months",
+        "notes": "At least 3 months current employer contract or freelancing proof"
+      }
+    },
+    "residency": {
+      "initial_duration": {
+        "value": 1,
+        "unit": "year",
+        "notes": "If applied from abroad (visa)"
+      },
+      "renewal": {
+        "possible": true,
+        "max_single_duration": {
+          "value": 3,
+          "unit": "years"
+        },
+        "notes": "Residence card up to 3 years; renewal mentioned as 2-year in table"
+      },
+      "path_to_long_term_residency": {
+        "explicit": true,
+        "possible_after_years": 5,
+        "conditions_summary": "After 5 years of legal residence may apply for long-term residence; dependents may also qualify"
+      }
+    },
+    "family": {
+      "dependents_allowed": true,
+      "dependent_types": [
+        "spouse",
+        "children"
+      ]
+    },
+    "taxation": {
+      "special_regime_exists": true,
+      "regime_name": "Beckham Law (special expat tax regime)",
+      "summary": "Qualifying individuals may pay a flat rate on Spanish-source income; report claims foreign income exempt.",
+      "foreign_income_taxation": {
+        "automatic_exemption": false,
+        "conditional_exemption": true,
+        "notes": "Treat as conditional; depends on eligibility and income/source classification."
+      }
+    },
+    "healthcare_and_insurance": {
+      "private_insurance_required": null,
+      "public_healthcare_access": "possible_after_registration",
+      "education_access": "children_public_school_possible"
+    },
+    "language_and_life": {
+      "primary_language": "Spanish",
+      "english_usage": "moderate_in_major_cities"
+    },
+    "sources": [
+      {
+        "id": "REPORT-西班牙",
+        "type": "internal_report",
+        "publisher": "User research report (data.md)",
+        "file_path": "/mnt/data/data.md",
+        "section": "西班牙",
+        "retrieved_at": "2026-02-07",
+        "scope": [
+          "all_fields_in_section"
+        ]
+      }
+    ]
+  },
+  {
+    "meta": {
+      "country": "Portugal",
+      "local_name": "葡萄牙",
+      "iso_code": "PT",
+      "last_reviewed_at": "2026-02-07",
+      "confidence_level": "medium"
+    },
+    "visa_policy": {
+      "visa_name": "D8 Visa",
+      "common_name": "Digital Nomad Visa",
+      "eligible_nationalities": "non-EU",
+      "eligible_worker_types": [
+        "remote_employee",
+        "freelancer"
+      ]
+    },
+    "financial_requirements": {
+      "minimum_income": {
+        "amount": 3040,
+        "currency": "EUR",
+        "period": "monthly",
+        "basis": "4x Portuguese minimum wage (2023 approx)",
+        "variable": true
+      },
+      "family_income_adjustment": {
+        "spouse_additional_pct": 50,
+        "child_additional_pct": 30
+      }
+    },
+    "residency": {
+      "initial_duration": {
+        "value": 2,
+        "unit": "years",
+        "notes": "After entry on 4-month visa, obtain 2-year residence permit"
+      },
+      "renewal": {
+        "possible": true,
+        "max_single_duration": {
+          "value": 3,
+          "unit": "years"
+        }
+      },
+      "path_to_long_term_residency": {
+        "explicit": true,
+        "possible_after_years": 5,
+        "conditions_summary": "After 5 years of legal residence may apply for permanent residence or citizenship"
+      }
+    },
+    "family": {
+      "dependents_allowed": true,
+      "dependent_types": [
+        "spouse",
+        "children"
+      ]
+    },
+    "taxation": {
+      "special_regime_exists": true,
+      "regime_name": "NHR (Non-Habitual Resident)",
+      "summary": "Optional tax regime for qualifying new tax residents; policy subject to change.",
+      "foreign_income_taxation": {
+        "automatic_exemption": false,
+        "conditional_exemption": true,
+        "notes": "Report suggests certain foreign income categories may be exempt; depends on tax law and status."
+      }
+    },
+    "healthcare_and_insurance": {
+      "private_insurance_required": null,
+      "public_healthcare_access": "SNS_possible_after_registration",
+      "education_access": "children_public_school_possible"
+    },
+    "language_and_life": {
+      "primary_language": "Portuguese",
+      "english_usage": "high_in_cities"
+    },
+    "sources": [
+      {
+        "id": "REPORT-葡萄牙",
+        "type": "internal_report",
+        "publisher": "User research report (data.md)",
+        "file_path": "/mnt/data/data.md",
+        "section": "葡萄牙",
+        "retrieved_at": "2026-02-07",
+        "scope": [
+          "all_fields_in_section"
+        ]
+      }
+    ]
+  },
+  {
+    "meta": {
+      "country": "Italy",
+      "local_name": "意大利",
+      "iso_code": "IT",
+      "last_reviewed_at": "2026-02-07",
+      "confidence_level": "medium"
+    },
+    "visa_policy": {
+      "visa_name": "High-skilled Digital Nomad / Remote Worker Visa",
+      "common_name": "Digital Nomad Visa",
+      "eligible_nationalities": "non-EU",
+      "eligible_worker_types": [
+        "remote_employee",
+        "freelancer"
+      ],
+      "quota": "no_annual_quota_reported",
+      "local_work_restrictions": {
+        "must_be_foreign_employer_or_clients": true
+      }
+    },
+    "financial_requirements": {
+      "minimum_income": {
+        "amount": 28000,
+        "currency": "EUR",
+        "period": "yearly",
+        "basis": "Net annual income threshold (approx.)",
+        "variable": true
+      },
+      "qualification_requirements": {
+        "education": ">=3-year degree OR",
+        "experience": "3 of last 7 years relevant OR 5 years professional experience (per report)"
+      },
+      "insurance_required": true
+    },
+    "residency": {
+      "initial_duration": {
+        "value": 1,
+        "unit": "year"
+      },
+      "renewal": {
+        "possible": true,
+        "renewal_increment": {
+          "value": 1,
+          "unit": "year"
+        }
+      },
+      "path_to_long_term_residency": {
+        "explicit": true,
+        "possible_after_years": 5,
+        "conditions_summary": "After 5 years of residence may qualify for long-term residence permit"
+      }
+    },
+    "family": {
+      "dependents_allowed": null,
+      "dependent_types": []
+    },
+    "taxation": {
+      "special_regime_exists": true,
+      "regime_name": "Impatriate tax regime (inbound talent relief)",
+      "summary": "Report states up to 70% PIT reduction for 5 years (90% in some regions).",
+      "foreign_income_taxation": {
+        "automatic_exemption": false,
+        "conditional_exemption": true,
+        "notes": "Tax outcomes depend on residence and income type."
+      }
+    },
+    "healthcare_and_insurance": {
+      "private_insurance_required": true,
+      "public_healthcare_access": "optional_join_NHS_with_fee_reported",
+      "education_access": "children_public_school_possible"
+    },
+    "language_and_life": {
+      "primary_language": "Italian",
+      "english_usage": "low_to_moderate_in_major_cities"
+    },
+    "sources": [
+      {
+        "id": "REPORT-意大利",
+        "type": "internal_report",
+        "publisher": "User research report (data.md)",
+        "file_path": "/mnt/data/data.md",
+        "section": "意大利",
+        "retrieved_at": "2026-02-07",
+        "scope": [
+          "all_fields_in_section"
+        ]
+      }
+    ]
+  },
+  {
+    "meta": {
+      "country": "Greece",
+      "local_name": "希腊",
+      "iso_code": "GR",
+      "last_reviewed_at": "2026-02-07",
+      "confidence_level": "medium"
+    },
+    "visa_policy": {
+      "visa_name": "Digital Nomad Visa",
+      "eligible_nationalities": "non-EU",
+      "eligible_worker_types": [
+        "remote_employee",
+        "freelancer"
+      ],
+      "local_work_restrictions": {
+        "no_local_employment": true
+      }
+    },
+    "financial_requirements": {
+      "minimum_income": {
+        "amount": 3500,
+        "currency": "EUR",
+        "period": "monthly",
+        "basis": "Net monthly income",
+        "variable": false
+      },
+      "family_income_adjustment": {
+        "spouse_additional_pct": 20,
+        "child_additional_pct": 15
+      }
+    },
+    "residency": {
+      "initial_duration": {
+        "value": 1,
+        "unit": "year"
+      },
+      "renewal": {
+        "possible": true,
+        "next_duration": {
+          "value": 2,
+          "unit": "years"
+        },
+        "max_total_duration": {
+          "value": 3,
+          "unit": "years",
+          "notes": "Report suggests up to 3 years or longer"
+        }
+      },
+      "path_to_long_term_residency": {
+        "explicit": false,
+        "possible_after_years": 5,
+        "conditions_summary": "Report states Greek law allows PR after 5 years continuous residence; treat as conditional and category-dependent."
+      }
+    },
+    "family": {
+      "dependents_allowed": true,
+      "dependent_types": [
+        "spouse",
+        "children"
+      ]
+    },
+    "taxation": {
+      "special_regime_exists": true,
+      "regime_name": "50% income tax reduction scheme (Law 4825/2021 per report)",
+      "summary": "Qualifying new tax residents may get 50% PIT reduction up to 7 years.",
+      "foreign_income_taxation": {
+        "automatic_exemption": false,
+        "conditional_exemption": true,
+        "notes": "Depends on tax residency and income type."
+      }
+    },
+    "healthcare_and_insurance": {
+      "private_insurance_required": true,
+      "public_healthcare_access": "possible_if_social_security_contributions",
+      "education_access": "public_school_possible_but_language_greek"
+    },
+    "language_and_life": {
+      "primary_language": "Greek",
+      "english_usage": "moderate_high_in_cities_and_tourist_areas"
+    },
+    "sources": [
+      {
+        "id": "REPORT-希腊",
+        "type": "internal_report",
+        "publisher": "User research report (data.md)",
+        "file_path": "/mnt/data/data.md",
+        "section": "希腊",
+        "retrieved_at": "2026-02-07",
+        "scope": [
+          "all_fields_in_section"
+        ]
+      }
+    ]
+  },
+  {
+    "meta": {
+      "country": "Croatia",
+      "local_name": "克罗地亚",
+      "iso_code": "HR",
+      "last_reviewed_at": "2026-02-07",
+      "confidence_level": "medium",
+      "notes": "Report includes 2025 policy change claims; verify implementation details."
+    },
+    "visa_policy": {
+      "visa_name": "Digital Nomad Temporary Residence",
+      "eligible_nationalities": "non-EU",
+      "eligible_worker_types": [
+        "remote_employee",
+        "self_employed"
+      ],
+      "local_work_restrictions": {
+        "no_local_clients": true
+      }
+    },
+    "financial_requirements": {
+      "minimum_income": {
+        "amount": 3295,
+        "currency": "EUR",
+        "period": "monthly",
+        "basis": "2025 threshold (report)",
+        "variable": true
+      },
+      "family_income_adjustment": {
+        "per_member_additional_pct": 10
+      }
+    },
+    "residency": {
+      "initial_duration": {
+        "value": 1,
+        "unit": "year"
+      },
+      "renewal": {
+        "possible": true,
+        "max_total_duration": {
+          "value": 3,
+          "unit": "years",
+          "notes": "Report claims from Aug 2025 up to 3 years"
+        },
+        "notes": "Previously non-renewable; policy evolving"
+      },
+      "path_to_long_term_residency": {
+        "explicit": false,
+        "possible_after_years": null,
+        "conditions_summary": "Digital nomad residence is temporary; long-term residence would require switching status / meeting statutory criteria."
+      }
+    },
+    "family": {
+      "dependents_allowed": true,
+      "dependent_types": [
+        "partner",
+        "children"
+      ]
+    },
+    "taxation": {
+      "special_regime_exists": true,
+      "regime_name": "Digital nomad foreign-income exemption (report)",
+      "summary": "Report states foreign-source income exempt from Croatian PIT during permit.",
+      "foreign_income_taxation": {
+        "automatic_exemption": false,
+        "conditional_exemption": true,
+        "notes": "Treat as conditional; depends on law and eligibility."
+      }
+    },
+    "healthcare_and_insurance": {
+      "private_insurance_required": true,
+      "public_healthcare_access": "generally_not_for_short_term",
+      "education_access": "international_or_online_typically"
+    },
+    "language_and_life": {
+      "primary_language": "Croatian",
+      "english_usage": "high_in_cities_and_tourist_areas"
+    },
+    "sources": [
+      {
+        "id": "REPORT-克罗地亚",
+        "type": "internal_report",
+        "publisher": "User research report (data.md)",
+        "file_path": "/mnt/data/data.md",
+        "section": "克罗地亚",
+        "retrieved_at": "2026-02-07",
+        "scope": [
+          "all_fields_in_section"
+        ]
+      }
+    ]
+  },
+  {
+    "meta": {
+      "country": "United Arab Emirates",
+      "local_name": "阿联酋（迪拜）",
+      "iso_code": "AE",
+      "last_reviewed_at": "2026-02-07",
+      "confidence_level": "medium"
+    },
+    "visa_policy": {
+      "visa_name": "Virtual Working Programme (Dubai)",
+      "eligible_nationalities": "all",
+      "eligible_worker_types": [
+        "remote_employee",
+        "business_owner"
+      ]
+    },
+    "financial_requirements": {
+      "minimum_income": {
+        "amount": 5000,
+        "currency": "USD",
+        "period": "monthly",
+        "basis": "salary or business income",
+        "variable": false
+      },
+      "documentation": {
+        "salary_slip_months": 1,
+        "bank_statement_months": 3,
+        "contract_min_term": "1 year (employment) or business license"
+      }
+    },
+    "residency": {
+      "initial_duration": {
+        "value": 1,
+        "unit": "year"
+      },
+      "renewal": {
+        "possible": true,
+        "renewal_increment": {
+          "value": 1,
+          "unit": "year"
+        }
+      },
+      "path_to_long_term_residency": {
+        "explicit": false,
+        "notes": "Separate programs exist (Green/Golden visas)"
+      }
+    },
+    "family": {
+      "dependents_allowed": null,
+      "dependent_types": []
+    },
+    "taxation": {
+      "personal_income_tax": {
+        "exists": false
+      },
+      "notes": "Report states no personal income tax; corporate tax exists."
+    },
+    "healthcare_and_insurance": {
+      "private_insurance_required": true,
+      "public_healthcare_access": "not_free_for_non_citizens",
+      "education_access": "private_or_international_schools"
+    },
+    "language_and_life": {
+      "primary_language": "Arabic",
+      "english_usage": "very_high"
+    },
+    "sources": [
+      {
+        "id": "REPORT-阿联酋（迪拜）",
+        "type": "internal_report",
+        "publisher": "User research report (data.md)",
+        "file_path": "/mnt/data/data.md",
+        "section": "阿联酋（迪拜）",
+        "retrieved_at": "2026-02-07",
+        "scope": [
+          "all_fields_in_section"
+        ]
+      }
+    ]
+  },
+  {
+    "meta": {
+      "country": "Thailand",
+      "local_name": "泰国",
+      "iso_code": "TH",
+      "last_reviewed_at": "2026-02-07",
+      "confidence_level": "medium",
+      "notes": "Tax statements in report are high risk; treat as conditional and policy-sensitive."
+    },
+    "visa_policy": {
+      "visa_name": "Long-Term Resident (LTR) – Work-from-Thailand Professional",
+      "eligible_nationalities": "all",
+      "eligible_worker_types": [
+        "remote_employee"
+      ],
+      "local_work_restrictions": {
+        "must_be_qualified_foreign_employer": true
+      }
+    },
+    "financial_requirements": {
+      "minimum_income": {
+        "amount": 80000,
+        "currency": "USD",
+        "period": "yearly",
+        "basis": "Average annual income past 2 years",
+        "variable": true
+      },
+      "alternative_threshold": {
+        "min": 40000,
+        "max": 80000,
+        "currency": "USD",
+        "conditions": "Requires advanced degree/IP/VC etc per report"
+      },
+      "experience_requirement_years": 5,
+      "insurance_requirement": {
+        "coverage_amount": 50000,
+        "currency": "USD"
+      }
+    },
+    "residency": {
+      "initial_duration": {
+        "value": 5,
+        "unit": "years"
+      },
+      "renewal": {
+        "possible": true,
+        "renewal_increment": {
+          "value": 5,
+          "unit": "years"
+        },
+        "max_total_duration": {
+          "value": 10,
+          "unit": "years"
+        }
+      },
+      "path_to_long_term_residency": {
+        "explicit": false,
+        "notes": "LTR is long-stay visa; permanent residence requires separate process."
+      }
+    },
+    "family": {
+      "dependents_allowed": true,
+      "dependent_types": [
+        "spouse",
+        "children"
+      ],
+      "max_dependents": 4
+    },
+    "taxation": {
+      "special_regime_exists": true,
+      "regime_name": "LTR-related tax provisions (report)",
+      "summary": "Report mentions 17% flat rate for certain high-skill categories and foreign-income treatment depending on remittance timing.",
+      "foreign_income_taxation": {
+        "automatic_exemption": false,
+        "conditional_exemption": true,
+        "notes": "Highly dependent on Thai tax rules and remittance; policy may change."
+      }
+    },
+    "healthcare_and_insurance": {
+      "private_insurance_required": true,
+      "public_healthcare_access": "optional_social_security",
+      "education_access": "international_schools_common"
+    },
+    "language_and_life": {
+      "primary_language": "Thai",
+      "english_usage": "moderate_in_bangkok_and_tourist_areas"
+    },
+    "sources": [
+      {
+        "id": "REPORT-泰国",
+        "type": "internal_report",
+        "publisher": "User research report (data.md)",
+        "file_path": "/mnt/data/data.md",
+        "section": "泰国",
+        "retrieved_at": "2026-02-07",
+        "scope": [
+          "all_fields_in_section"
+        ]
+      }
+    ]
+  },
+  {
+    "meta": {
+      "country": "Malaysia",
+      "local_name": "马来西亚",
+      "iso_code": "MY",
+      "last_reviewed_at": "2026-02-07",
+      "confidence_level": "medium",
+      "notes": "Foreign-source income exemption described as time-bounded in report."
+    },
+    "visa_policy": {
+      "visa_name": "DE Rantau Nomad Pass (Professional Visit Pass)",
+      "eligible_nationalities": "all",
+      "eligible_worker_types": [
+        "remote_employee",
+        "freelancer"
+      ],
+      "local_work_restrictions": {
+        "work_scope": "digital/IT related as per program"
+      }
+    },
+    "financial_requirements": {
+      "minimum_income": {
+        "amount": 24000,
+        "currency": "USD",
+        "period": "yearly",
+        "basis": "IT/digital professionals threshold",
+        "variable": false
+      },
+      "non_digital_threshold": {
+        "amount": 60000,
+        "currency": "USD",
+        "period": "yearly"
+      },
+      "documentation": {
+        "bank_statement_months": 3
+      }
+    },
+    "residency": {
+      "initial_duration": {
+        "value": 12,
+        "unit": "months"
+      },
+      "renewal": {
+        "possible": true,
+        "renewal_increment": {
+          "value": 12,
+          "unit": "months"
+        },
+        "max_total_duration": {
+          "value": 24,
+          "unit": "months"
+        }
+      },
+      "path_to_long_term_residency": {
+        "explicit": false,
+        "notes": "Not a long-term residence path; other programs (e.g., MM2H) may exist."
+      }
+    },
+    "family": {
+      "dependents_allowed": true,
+      "dependent_types": [
+        "spouse",
+        "children"
+      ]
+    },
+    "taxation": {
+      "special_regime_exists": true,
+      "regime_name": "Foreign-sourced income exemption window (report)",
+      "summary": "Report states foreign-sourced income remitted by resident individuals exempt from 2022-01-01 to 2026-12-31.",
+      "foreign_income_taxation": {
+        "automatic_exemption": false,
+        "conditional_exemption": true,
+        "notes": "Conditional and time-bounded; confirm current law."
+      }
+    },
+    "healthcare_and_insurance": {
+      "private_insurance_required": null,
+      "public_healthcare_access": "limited_for_temp_pass",
+      "education_access": "international_schools_common"
+    },
+    "language_and_life": {
+      "primary_language": "Malay",
+      "english_usage": "high"
+    },
+    "sources": [
+      {
+        "id": "REPORT-马来西亚",
+        "type": "internal_report",
+        "publisher": "User research report (data.md)",
+        "file_path": "/mnt/data/data.md",
+        "section": "马来西亚",
+        "retrieved_at": "2026-02-07",
+        "scope": [
+          "all_fields_in_section"
+        ]
+      }
+    ]
+  },
+  {
+    "meta": {
+      "country": "Indonesia",
+      "local_name": "印度尼西亚",
+      "iso_code": "ID",
+      "last_reviewed_at": "2026-02-07",
+      "confidence_level": "medium"
+    },
+    "visa_policy": {
+      "visa_name": "Remote Worker KITAS / Second Home Visa (options)",
+      "eligible_nationalities": "all",
+      "eligible_worker_types": [
+        "remote_employee"
+      ],
+      "local_work_restrictions": {
+        "no_local_employment": true
+      }
+    },
+    "financial_requirements": {
+      "minimum_income": {
+        "amount": 60000,
+        "currency": "USD",
+        "period": "yearly",
+        "basis": "Remote Worker KITAS threshold",
+        "variable": false
+      },
+      "second_home_assets_requirement": {
+        "amount": 135000,
+        "currency": "USD",
+        "basis": "Approx asset threshold (bank deposit or property)"
+      }
+    },
+    "residency": {
+      "initial_duration": {
+        "value": 1,
+        "unit": "year",
+        "notes": "Remote Worker KITAS"
+      },
+      "renewal": {
+        "possible": true,
+        "max_total_duration": {
+          "value": 5,
+          "unit": "years",
+          "notes": "Remote Worker KITAS cumulative per report"
+        }
+      },
+      "alternative_paths": [
+        {
+          "name": "Second Home Visa",
+          "duration": {
+            "value": 5,
+            "unit": "years"
+          },
+          "renewal_possible": true,
+          "max_total_duration": {
+            "value": 10,
+            "unit": "years"
+          }
+        }
+      ]
+    },
+    "family": {
+      "dependents_allowed": null,
+      "dependent_types": []
+    },
+    "taxation": {
+      "special_regime_exists": true,
+      "regime_name": "Offshore income exemption for certain visa holders (report)",
+      "summary": "Report states KITAS holders treated as tax residents but offshore income exempt if from foreign employer and no local business.",
+      "foreign_income_taxation": {
+        "automatic_exemption": false,
+        "conditional_exemption": true,
+        "notes": "Conditional on visa category and income structure."
+      }
+    },
+    "healthcare_and_insurance": {
+      "private_insurance_required": true,
+      "public_healthcare_access": "limited",
+      "education_access": "international_schools_optional"
+    },
+    "language_and_life": {
+      "primary_language": "Indonesian",
+      "english_usage": "high_in_bali_tourist_areas"
+    },
+    "sources": [
+      {
+        "id": "REPORT-印度尼西亚",
+        "type": "internal_report",
+        "publisher": "User research report (data.md)",
+        "file_path": "/mnt/data/data.md",
+        "section": "印度尼西亚",
+        "retrieved_at": "2026-02-07",
+        "scope": [
+          "all_fields_in_section"
+        ]
+      }
+    ]
+  },
+  {
+    "meta": {
+      "country": "South Korea",
+      "local_name": "韩国",
+      "iso_code": "KR",
+      "last_reviewed_at": "2026-02-07",
+      "confidence_level": "medium",
+      "notes": "Income threshold based on GNI multiple in report; verify annually."
+    },
+    "visa_policy": {
+      "visa_name": "Digital Nomad Visa D-10-3",
+      "eligible_nationalities": "all",
+      "eligible_worker_types": [
+        "remote_employee"
+      ],
+      "local_work_restrictions": {
+        "no_local_employment": true
+      }
+    },
+    "financial_requirements": {
+      "minimum_income": {
+        "amount": 66000,
+        "currency": "USD",
+        "period": "yearly",
+        "basis": "~2x Korea per-capita GNI (using 2022 approx. per report)",
+        "variable": true
+      },
+      "experience_requirement_years": 1
+    },
+    "residency": {
+      "initial_duration": {
+        "value": 1,
+        "unit": "year"
+      },
+      "renewal": {
+        "possible": true,
+        "renewal_increment": {
+          "value": 1,
+          "unit": "year"
+        },
+        "max_total_duration": {
+          "value": 2,
+          "unit": "years"
+        }
+      },
+      "path_to_long_term_residency": {
+        "explicit": false,
+        "notes": "Not a direct PR path; other visa types required."
+      }
+    },
+    "family": {
+      "dependents_allowed": true,
+      "dependent_types": [
+        "spouse",
+        "children"
+      ]
+    },
+    "taxation": {
+      "special_regime_exists": false,
+      "summary": "Report states no special relief; >183 days may trigger tax residency and worldwide income taxation.",
+      "foreign_income_taxation": {
+        "automatic_exemption": false,
+        "conditional_exemption": true,
+        "notes": "Depends on tax residency status and treaties."
+      }
+    },
+    "healthcare_and_insurance": {
+      "private_insurance_required": null,
+      "public_healthcare_access": "possible_after_registration_with_NHI",
+      "education_access": "international_or_local_schools"
+    },
+    "language_and_life": {
+      "primary_language": "Korean",
+      "english_usage": "low_to_moderate"
+    },
+    "sources": [
+      {
+        "id": "REPORT-韩国",
+        "type": "internal_report",
+        "publisher": "User research report (data.md)",
+        "file_path": "/mnt/data/data.md",
+        "section": "韩国",
+        "retrieved_at": "2026-02-07",
+        "scope": [
+          "all_fields_in_section"
+        ]
+      }
+    ]
+  }
+]

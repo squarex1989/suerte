@@ -9,12 +9,13 @@ import {
 import { countries, toUsdMonthly } from "@/data/countries";
 
 /* ================================================================
-   Suerte Recommendation Engine
-   – Hard Filter (7.2)
-   – Soft Score  (7.3)  5 dimensions, 100 points
-   – Modifiers   (7.4)
+   Suerte Recommendation Engine v2
+   Aligned with digital_nomad_countries_policy_facts.json
+   – Hard Filter (7.2) — with null-safe handling
+   – Soft Score  (7.3) — 5 dimensions, 100 points
+   – Modifiers   (7.4) — confidence & conditional adjustments
    – Ranking     (7.5)
-   – Explanations(7.6)
+   – Explanations(7.6) — conservative, source-cited
    ================================================================ */
 
 // ────────────────── helpers ──────────────────
@@ -54,9 +55,7 @@ function hardFilter(user: UserAnswers, c: CountryPolicy): FilterResult {
   }
 
   // F2 Work type
-  if (
-    !(c.allowed_work_types as string[]).includes(user.work_type)
-  ) {
+  if (!(c.allowed_work_types as string[]).includes(user.work_type)) {
     const labels: Record<string, string> = {
       overseas_remote_employee: "海外公司远程雇员",
       domestic_remote_employee: "国内公司远程雇员",
@@ -73,8 +72,9 @@ function hardFilter(user: UserAnswers, c: CountryPolicy): FilterResult {
     reasons.push("该国禁止为当地公司/客户工作，但你无法接受此限制");
   }
 
-  // F4 Insurance
-  if (c.insurance_required && !user.can_buy_insurance) {
+  // F4 Insurance — only hard-filter when explicitly required (true)
+  // When null (uncertain), we skip hard filter but add risk later
+  if (c.insurance_required === true && !user.can_buy_insurance) {
     reasons.push("该国签证强制要求私人医疗保险，但你无法购买");
   }
 
@@ -103,9 +103,7 @@ function hardFilter(user: UserAnswers, c: CountryPolicy): FilterResult {
   }
   if (c.min_experience_years > 0) {
     if (!user.docs_available.includes("education_or_experience")) {
-      if (
-        !reasons.some((r) => r.includes("学历或工作经验"))
-      ) {
+      if (!reasons.some((r) => r.includes("学历或工作经验"))) {
         reasons.push(
           `该国要求至少 ${c.min_experience_years} 年工作经验证明`
         );
@@ -153,8 +151,6 @@ function scoreFeasibility(user: UserAnswers, c: CountryPolicy): number {
 // B: Stability (max 20)
 function scoreStability(c: CountryPolicy): number {
   let s = 0;
-
-  // B1 Max stay (0-10)
   const m = c.max_stay_months;
   if (m >= 120) s += 10;
   else if (m >= 60) s += 8;
@@ -162,7 +158,6 @@ function scoreStability(c: CountryPolicy): number {
   else if (m >= 24) s += 4;
   else s += 2;
 
-  // B2 Initial term (0-5)
   const init = c.initial_term_months;
   if (init >= 60) s += 5;
   else if (init >= 36) s += 4;
@@ -170,7 +165,6 @@ function scoreStability(c: CountryPolicy): number {
   else if (init >= 12) s += 2;
   else s += 1;
 
-  // B3 Renewal (0-5)
   if (c.renewable) {
     s += 3;
     if (c.max_stay_months > c.initial_term_months) s += 2;
@@ -181,18 +175,27 @@ function scoreStability(c: CountryPolicy): number {
 
 // C: Long-term (max 15)
 function scoreLongterm(user: UserAnswers, c: CountryPolicy): number {
-  if (!user.want_long_term) return 7; // neutral
+  if (!user.want_long_term) return 7;
 
   let s = 0;
-  if (c.path_to_pr) s += 8;
+
+  // C1: PR path (0-8) — penalize non-explicit paths
+  if (c.path_to_pr && c.path_to_pr_explicit) s += 8;
+  else if (c.path_to_pr && !c.path_to_pr_explicit) s += 4; // conditional/uncertain PR
+  // else: 0
+
+  // C2: Years to PR (0-4)
   if (c.path_to_pr && c.years_to_pr !== null) {
     if (c.years_to_pr <= 3) s += 4;
     else if (c.years_to_pr <= 5) s += 3;
     else if (c.years_to_pr <= 7) s += 2;
     else s += 1;
   }
-  if (c.path_to_pr && c.family_allowed) s += 3;
-  else if (c.family_allowed) s += 1;
+
+  // C3: Family shares PR (0-3)
+  if (c.path_to_pr && c.family_allowed === true) s += 3;
+  else if (c.family_allowed === true) s += 1;
+  // null family_allowed → 0 (uncertain)
 
   return s;
 }
@@ -214,11 +217,16 @@ function scoreTax(c: CountryPolicy): number {
     else if (effective <= 30) s += 4;
     else s += 2;
   }
-  // no_benefit: 0
+
+  // D1b: Conditional penalty — reduce by 1 when exemption is not automatic
+  if (tax.foreign_income_conditional && tax.type !== "zero" && tax.type !== "no_benefit") {
+    s = Math.max(s - 1, 0);
+  }
 
   // D2 Duration (0-4)
   if (tax.type === "zero") s += 4;
-  else if (tax.type === "exempt") s += 4;
+  else if (tax.type === "exempt" && !tax.foreign_income_conditional) s += 4;
+  else if (tax.type === "exempt" && tax.foreign_income_conditional) s += 3; // conditional: reduce
   else if (tax.benefit_duration_years >= 10) s += 4;
   else if (tax.benefit_duration_years >= 7) s += 3;
   else if (tax.benefit_duration_years >= 5) s += 2;
@@ -287,20 +295,22 @@ function applyModifiers(
 ): number {
   let f = base;
 
-  // M1 Family
+  // M1 Family — only apply bonus when family_allowed is explicitly true
   if (user.has_spouse || user.num_children > 0) {
-    if (c.family_allowed) {
+    if (c.family_allowed === true) {
       if (c.public_education) f += 3;
       if (c.public_healthcare) f += 2;
+    } else if (c.family_allowed === null) {
+      f -= 2; // uncertain: mild penalty
     } else {
-      f -= 5;
+      f -= 5; // explicitly not allowed
     }
   }
 
   // M2 Stay × tax
   if (user.planned_stay === ">183d") {
     if (c.tax_policy.type === "zero") f += 2;
-    else if (c.tax_policy.type === "exempt") f += 1;
+    else if (c.tax_policy.type === "exempt" && !c.tax_policy.foreign_income_conditional) f += 1;
     else if (c.tax_policy.type === "no_benefit") f -= 5;
   }
   if (user.planned_stay === "<90d" && c.max_stay_months >= 60) {
@@ -318,6 +328,11 @@ function applyModifiers(
   const days = daysSince(c.last_verified_at);
   if (days > 180) f -= 10;
   else if (days > 90) f -= 5;
+
+  // M5 Confidence level penalty (new)
+  if (c.confidence_level === "low") f -= 5;
+  else if (c.confidence_level === "medium") f -= 2;
+  // high: no penalty
 
   return Math.max(f, 0);
 }
@@ -343,7 +358,11 @@ function genHighlights(
       field: "max_stay_months",
     });
 
-  if ((user.has_spouse || user.num_children > 0) && c.public_education)
+  if (
+    (user.has_spouse || user.num_children > 0) &&
+    c.family_allowed === true &&
+    c.public_education
+  )
     pool.push({
       text: "子女可入读公立学校，家属可随行享受居留权益",
       field: "public_education",
@@ -355,13 +374,16 @@ function genHighlights(
       field: "min_income",
     });
 
-  if (c.cost_of_living.level === user.cost_preference || (user.cost_preference === "low" && c.cost_of_living.level === "low"))
+  if (
+    c.cost_of_living.level === user.cost_preference ||
+    (user.cost_preference === "low" && c.cost_of_living.level === "low")
+  )
     pool.push({
       text: `生活成本${c.cost_of_living.level === "low" ? "低廉" : "适中"}，符合你的预算偏好`,
       field: "cost_of_living",
     });
 
-  if (c.path_to_pr && user.want_long_term)
+  if (c.path_to_pr && c.path_to_pr_explicit && user.want_long_term)
     pool.push({
       text: `居留满 ${c.years_to_pr} 年可转永居，长期规划友好`,
       field: "path_to_pr",
@@ -382,9 +404,9 @@ function genHighlights(
       field: "public_healthcare",
     });
 
-  if (c.tax_policy.type === "zero" || c.tax_policy.type === "exempt")
+  if (c.tax_policy.type === "zero")
     pool.push({
-      text: "境外收入免税，远程工作税负极低",
+      text: "零个人所得税，远程工作税负为零",
       field: "tax_policy",
     });
 
@@ -402,12 +424,21 @@ function genHighlights(
 function genRisks(user: UserAnswers, c: CountryPolicy): Risk[] {
   const pool: Risk[] = [];
 
+  // Tax conditional warning — new: warn about non-automatic exemptions
+  if (c.tax_policy.foreign_income_conditional && c.tax_policy.type !== "no_benefit") {
+    pool.push({
+      text: "税务优惠为条件性政策，需满足特定资格要求，建议咨询专业税务意见",
+      field: "tax_conditional",
+      severity: "medium",
+    });
+  }
+
   if (
     user.planned_stay === ">183d" &&
     c.tax_policy.type === "no_benefit"
   )
     pool.push({
-      text: "停留超 183 天将触发税务居民身份，需按当地税率缴全球收入税",
+      text: "停留超 183 天可能触发税务居民身份，需按当地税率缴全球收入税",
       field: "tax_policy",
       severity: "high",
     });
@@ -419,11 +450,36 @@ function genRisks(user: UserAnswers, c: CountryPolicy): Risk[] {
       severity: "medium",
     });
 
-  if (c.insurance_required)
+  if (c.path_to_pr && !c.path_to_pr_explicit && user.want_long_term)
+    pool.push({
+      text: "永居路径非明确保证，需满足额外条件且可能受政策变化影响",
+      field: "path_to_pr_explicit",
+      severity: "medium",
+    });
+
+  // Insurance uncertain
+  if (c.insurance_required === null)
+    pool.push({
+      text: "医疗保险要求不明确，建议提前确认并准备商业保险",
+      field: "insurance_unknown",
+      severity: "low",
+    });
+  else if (c.insurance_required === true)
     pool.push({
       text: "签证强制要求私人医疗保险，需持续缴费",
       field: "insurance_required",
       severity: "low",
+    });
+
+  // Family uncertain
+  if (
+    c.family_allowed === null &&
+    (user.has_spouse || user.num_children > 0)
+  )
+    pool.push({
+      text: "家属随行政策尚未确认，需向官方核实是否支持配偶/子女签证",
+      field: "family_unknown",
+      severity: "high",
     });
 
   if (c.language_env.english_friendly === "low")
@@ -448,6 +504,14 @@ function genRisks(user: UserAnswers, c: CountryPolicy): Risk[] {
       text: "生活成本较高，与你的低预算偏好不匹配",
       field: "cost_of_living",
       severity: "medium",
+    });
+
+  // Confidence warning
+  if (c.confidence_level === "medium" || c.confidence_level === "low")
+    pool.push({
+      text: `数据置信度为「${c.confidence_level === "medium" ? "中" : "低"}」，建议在申请前核实官方最新政策`,
+      field: "confidence",
+      severity: c.confidence_level === "low" ? "high" : "low",
     });
 
   const days = daysSince(c.last_verified_at);
@@ -511,7 +575,6 @@ export function recommend(user: UserAnswers): CountryResult[] {
     });
   }
 
-  // sort recommended by score desc
   results.sort((a, b) => {
     if (a.status === "EXCLUDED" && b.status !== "EXCLUDED") return 1;
     if (a.status !== "EXCLUDED" && b.status === "EXCLUDED") return -1;
