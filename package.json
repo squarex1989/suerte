@@ -6,13 +6,14 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "serve out -s -l tcp://0.0.0.0:${PORT:-8080}",
     "lint": "next lint"
   },
   "dependencies": {
     "next": "^14.2.21",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "serve": "^14.2.5"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
