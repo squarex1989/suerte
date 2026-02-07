@@ -16,9 +16,14 @@
         "remote_employee",
         "freelancer"
       ],
-      "local_client_income_limit": {
-        "exists": true,
-        "max_percentage": 20
+      "business_owner_conditions": {
+        "allowed": true,
+        "notes": "Business owners may qualify if acting as remote professionals providing services to a non-Spanish company",
+        "restrictions": [
+          "Company must be established outside Spain",
+          "Service-based remuneration required",
+          "Spanish-source income capped at 20%"
+        ]
       }
     },
     "financial_requirements": {
