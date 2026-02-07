@@ -69,6 +69,8 @@ export interface CountryPolicy {
     };
   };
   allowed_work_types: WorkType[];
+  business_owner_conditional: boolean;   // true = company_owner allowed but with restrictions
+  business_owner_restrictions: string[]; // restriction descriptions (from JSON)
   local_work_prohibited: boolean;
   family_allowed: boolean | null;       // null = uncertain / not confirmed
   insurance_required: boolean | null;   // null = uncertain

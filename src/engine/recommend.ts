@@ -424,7 +424,16 @@ function genHighlights(
 function genRisks(user: UserAnswers, c: CountryPolicy): Risk[] {
   const pool: Risk[] = [];
 
-  // Tax conditional warning — new: warn about non-automatic exemptions
+  // Business owner conditional warning
+  if (user.work_type === "company_owner" && c.business_owner_conditional && c.business_owner_restrictions.length > 0) {
+    pool.push({
+      text: `自有公司需满足额外条件：${c.business_owner_restrictions.join("；")}`,
+      field: "business_owner",
+      severity: "medium",
+    });
+  }
+
+  // Tax conditional warning — warn about non-automatic exemptions
   if (c.tax_policy.foreign_income_conditional && c.tax_policy.type !== "no_benefit") {
     pool.push({
       text: "税务优惠为条件性政策，需满足特定资格要求，建议咨询专业税务意见",

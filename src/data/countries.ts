@@ -276,6 +276,14 @@ function transform(raw: any, enrich: CountryEnrichment): CountryPolicy {
   // ── work types ──
   const allowedWorkTypes = mapWorkTypes(visa?.eligible_worker_types ?? []);
 
+  // If business_owner_conditions.allowed is true, add company_owner (with conditions)
+  const boc = visa?.business_owner_conditions;
+  const businessOwnerConditional = boc?.allowed === true;
+  const businessOwnerRestrictions: string[] = boc?.restrictions ?? [];
+  if (businessOwnerConditional && !allowedWorkTypes.includes("company_owner")) {
+    allowedWorkTypes.push("company_owner");
+  }
+
   // ── local work prohibited ──
   const localRestrictions = visa?.local_work_restrictions;
   const localClientLimit = visa?.local_client_income_limit;
@@ -368,6 +376,8 @@ function transform(raw: any, enrich: CountryEnrichment): CountryPolicy {
     },
 
     allowed_work_types: allowedWorkTypes,
+    business_owner_conditional: businessOwnerConditional,
+    business_owner_restrictions: businessOwnerRestrictions,
     local_work_prohibited: localProhibited,
     family_allowed: familyAllowed,
     insurance_required: insuranceRequired,
