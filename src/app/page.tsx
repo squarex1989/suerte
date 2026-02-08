@@ -14,6 +14,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [lastAnswers, setLastAnswers] = useState<UserAnswers | null>(null);
+  const [usedLocalFallback, setUsedLocalFallback] = useState(false);
 
   const handleSubmit = async (answers: UserAnswers) => {
     setError(null);
@@ -29,7 +30,10 @@ export default function Home() {
       if (!res.ok) {
         throw new Error(data.details ?? data.error ?? `请求失败 (${res.status})`);
       }
-      setResults(data as CountryResult[]);
+      const list = Array.isArray(data) ? data : data.results;
+      if (!Array.isArray(list)) throw new Error("Invalid response format");
+      setResults(list as CountryResult[]);
+      setUsedLocalFallback(!!data.fallback);
       setView("results");
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (e) {
@@ -41,6 +45,7 @@ export default function Home() {
 
   const handleFallback = (answers: UserAnswers) => {
     setError(null);
+    setUsedLocalFallback(true);
     const r = recommend(answers);
     setResults(r);
     setView("results");
@@ -50,6 +55,7 @@ export default function Home() {
   const handleReset = () => {
     setResults([]);
     setError(null);
+    setUsedLocalFallback(false);
     setView("hero");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -167,7 +173,11 @@ export default function Home() {
 
         {/* ── Results ── */}
         {view === "results" && (
-          <ResultsPage results={results} onReset={handleReset} />
+          <ResultsPage
+            results={results}
+            onReset={handleReset}
+            usedLocalFallback={usedLocalFallback}
+          />
         )}
       </main>
 

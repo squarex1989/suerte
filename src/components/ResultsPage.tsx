@@ -6,9 +6,11 @@ import CountryCard from "./CountryCard";
 export default function ResultsPage({
   results,
   onReset,
+  usedLocalFallback = false,
 }: {
   results: CountryResult[];
   onReset: () => void;
+  usedLocalFallback?: boolean;
 }) {
   const recommended = results.filter((r) => r.status === "RECOMMENDED");
   const excluded = results.filter((r) => r.status === "EXCLUDED");
@@ -20,6 +22,11 @@ export default function ResultsPage({
 
   return (
     <div className="mx-auto max-w-3xl">
+      {usedLocalFallback && (
+        <div className="mb-4 p-3 rounded-xl bg-slate-100 border border-slate-200 text-xs text-slate-600 text-center">
+          AI 推荐未配置或不可用，本次结果由本地规则计算。
+        </div>
+      )}
       {/* summary */}
       <div className="text-center mb-6 sm:mb-10">
         <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 mb-2 sm:mb-3">

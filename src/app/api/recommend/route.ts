@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import type { UserAnswers, CountryResult, CountryPolicy, ScoreBreakdown, Highlight, Risk } from "@/types";
 import { countries } from "@/data/countries";
 import { toUsdMonthly } from "@/data/countries";
+import { recommend } from "@/engine/recommend";
 
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 const MODEL = "minimax/minimax-m2.1";
@@ -115,18 +116,16 @@ function mergeToCountryResults(aiItems: AIResultItem[]): CountryResult[] {
 
 export async function POST(request: Request) {
   const key = process.env.OPENROUTER_API_KEY;
-  if (!key) {
-    return NextResponse.json(
-      { error: "OPENROUTER_API_KEY is not configured" },
-      { status: 500 }
-    );
-  }
-
   let body: UserAnswers;
   try {
     body = (await request.json()) as UserAnswers;
   } catch {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+  }
+
+  if (!key) {
+    const results = recommend(body);
+    return NextResponse.json({ results, fallback: true });
   }
 
   const userProfile = userProfileToChinese(body);
@@ -160,6 +159,8 @@ export async function POST(request: Request) {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${key}`,
+        "HTTP-Referer": "https://suerte-production.up.railway.app",
+        "X-Title": "Suerte",
       },
       body: JSON.stringify({
         model: MODEL,
@@ -168,37 +169,58 @@ export async function POST(request: Request) {
           { role: "user", content: userPrompt },
         ],
         temperature: 0.3,
-        max_tokens: 4096,
+        max_tokens: 32768,
       }),
     });
 
     if (!res.ok) {
       const errText = await res.text();
-      return NextResponse.json(
-        { error: `OpenRouter error: ${res.status}`, details: errText },
-        { status: 502 }
-      );
+      console.error("[recommend] OpenRouter HTTP error:", res.status, errText);
+      // Fallback to local on API error
+      const results = recommend(body);
+      return NextResponse.json({ results, fallback: true });
     }
 
-    const data = (await res.json()) as {
-      choices?: Array<{ message?: { content?: string } }>;
-    };
-    const content = data.choices?.[0]?.message?.content;
-    if (!content) {
-      return NextResponse.json(
-        { error: "Empty response from OpenRouter" },
-        { status: 502 }
-      );
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const data = (await res.json()) as any;
+    console.log("[recommend] OpenRouter raw keys:", Object.keys(data));
+
+    const msg = data.choices?.[0]?.message;
+    // MiniMax-m2.1 is a reasoning model: actual output may be in `content`, but if
+    // the model runs out of non-reasoning tokens, `content` can be "" while
+    // `reasoning` still holds useful text. Try content first, then reasoning.
+    let content: string | undefined =
+      (typeof msg?.content === "string" && msg.content.length > 0) ? msg.content : undefined;
+
+    if (!content && typeof msg?.reasoning === "string" && msg.reasoning.length > 0) {
+      console.log("[recommend] content empty, trying reasoning field");
+      content = msg.reasoning;
     }
+
+    // Also handle alternative response shapes
+    if (!content) {
+      content =
+        data.choices?.[0]?.text ??
+        (typeof data.output === "string" ? data.output : undefined);
+    }
+
+    if (!content) {
+      console.error("[recommend] No content in response:", JSON.stringify(data).slice(0, 500));
+      // Fallback to local when AI returns empty
+      const results = recommend(body);
+      return NextResponse.json({ results, fallback: true });
+    }
+
+    console.log("[recommend] Got content length:", content.length);
 
     const aiItems = parseAIResponse(content);
     const results = mergeToCountryResults(aiItems);
-    return NextResponse.json(results);
+    return NextResponse.json({ results, fallback: false });
   } catch (e) {
     const message = e instanceof Error ? e.message : "Unknown error";
-    return NextResponse.json(
-      { error: "Recommendation failed", details: message },
-      { status: 500 }
-    );
+    console.error("[recommend] Exception:", message);
+    // Fallback to local on any exception
+    const results = recommend(body);
+    return NextResponse.json({ results, fallback: true });
   }
 }
