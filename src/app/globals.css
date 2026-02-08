@@ -60,3 +60,12 @@ button, label, a, [role="button"] {
     -webkit-text-size-adjust: 100%;
   }
 }
+
+/* explicit spinner animation (not relying on Tailwind animate-spin) */
+@keyframes spinner-rotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.loading-spinner {
+  animation: spinner-rotate 0.8s linear infinite;
+}

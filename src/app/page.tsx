@@ -137,7 +137,7 @@ export default function Home() {
             {loading && (
               <div className="fixed inset-0 z-40 flex items-center justify-center bg-slate-900/20 backdrop-blur-sm">
                 <div className="bg-white rounded-2xl shadow-xl border border-slate-100 px-8 py-6 text-center max-w-sm mx-4">
-                  <div className="inline-block w-8 h-8 border-2 border-brand-500 border-t-transparent rounded-full animate-spin mb-4" />
+                  <div className="loading-spinner inline-block w-8 h-8 border-2 border-brand-500 border-t-transparent rounded-full mb-4" />
                   <p className="text-slate-700 font-medium">正在用 AI 分析推荐结果…</p>
                   <p className="text-xs text-slate-400 mt-1">请稍候</p>
                 </div>
