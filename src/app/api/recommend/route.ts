@@ -5,7 +5,7 @@ import { toUsdMonthly } from "@/data/countries";
 import { recommend } from "@/engine/recommend";
 
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
-const MODEL = "minimax/minimax-m2.1";
+const MODEL = "deepseek/deepseek-chat-v3-0324";
 
 function buildCountrySummary(c: CountryPolicy): string {
   const minMonthlyUsd = toUsdMonthly(c);
@@ -169,7 +169,7 @@ export async function POST(request: Request) {
           { role: "user", content: userPrompt },
         ],
         temperature: 0.3,
-        max_tokens: 32768,
+        max_tokens: 4096,
       }),
     });
 
@@ -183,35 +183,20 @@ export async function POST(request: Request) {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const data = (await res.json()) as any;
-    console.log("[recommend] OpenRouter raw keys:", Object.keys(data));
 
-    const msg = data.choices?.[0]?.message;
-    // MiniMax-m2.1 is a reasoning model: actual output may be in `content`, but if
-    // the model runs out of non-reasoning tokens, `content` can be "" while
-    // `reasoning` still holds useful text. Try content first, then reasoning.
-    let content: string | undefined =
-      (typeof msg?.content === "string" && msg.content.length > 0) ? msg.content : undefined;
-
-    if (!content && typeof msg?.reasoning === "string" && msg.reasoning.length > 0) {
-      console.log("[recommend] content empty, trying reasoning field");
-      content = msg.reasoning;
-    }
-
-    // Also handle alternative response shapes
-    if (!content) {
-      content =
-        data.choices?.[0]?.text ??
-        (typeof data.output === "string" ? data.output : undefined);
-    }
+    // DeepSeek V3 uses standard OpenAI response shape: choices[0].message.content
+    const content: string | undefined =
+      data.choices?.[0]?.message?.content ??
+      data.choices?.[0]?.text ??
+      undefined;
 
     if (!content) {
       console.error("[recommend] No content in response:", JSON.stringify(data).slice(0, 500));
-      // Fallback to local when AI returns empty
       const results = recommend(body);
       return NextResponse.json({ results, fallback: true });
     }
 
-    console.log("[recommend] Got content length:", content.length);
+    console.log("[recommend] AI responded, content length:", content.length);
 
     const aiItems = parseAIResponse(content);
     const results = mergeToCountryResults(aiItems);
