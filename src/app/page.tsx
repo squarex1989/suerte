@@ -11,8 +11,36 @@ type View = "hero" | "quiz" | "results";
 export default function Home() {
   const [view, setView] = useState<View>("hero");
   const [results, setResults] = useState<CountryResult[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [lastAnswers, setLastAnswers] = useState<UserAnswers | null>(null);
 
-  const handleSubmit = (answers: UserAnswers) => {
+  const handleSubmit = async (answers: UserAnswers) => {
+    setError(null);
+    setLastAnswers(answers);
+    setLoading(true);
+    try {
+      const res = await fetch("/api/recommend", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(answers),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.details ?? data.error ?? `请求失败 (${res.status})`);
+      }
+      setResults(data as CountryResult[]);
+      setView("results");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "网络或服务异常");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleFallback = (answers: UserAnswers) => {
+    setError(null);
     const r = recommend(answers);
     setResults(r);
     setView("results");
@@ -21,6 +49,7 @@ export default function Home() {
 
   const handleReset = () => {
     setResults([]);
+    setError(null);
     setView("hero");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -96,7 +125,45 @@ export default function Home() {
         )}
 
         {/* ── Questionnaire ── */}
-        {view === "quiz" && <Questionnaire onSubmit={handleSubmit} />}
+        {view === "quiz" && (
+          <>
+            <Questionnaire onSubmit={handleSubmit} disabled={loading} />
+            {loading && (
+              <div className="fixed inset-0 z-40 flex items-center justify-center bg-slate-900/20 backdrop-blur-sm">
+                <div className="bg-white rounded-2xl shadow-xl border border-slate-100 px-8 py-6 text-center max-w-sm mx-4">
+                  <div className="inline-block w-8 h-8 border-2 border-brand-500 border-t-transparent rounded-full animate-spin mb-4" />
+                  <p className="text-slate-700 font-medium">正在用 AI 分析推荐结果…</p>
+                  <p className="text-xs text-slate-400 mt-1">请稍候</p>
+                </div>
+              </div>
+            )}
+            {error && (
+              <div className="mt-4 p-4 bg-red-50 border border-red-100 rounded-xl text-sm text-red-700">
+                <p className="font-medium">获取推荐失败</p>
+                <p className="mt-1 text-red-600">{error}</p>
+                <p className="mt-3 text-slate-600">可重试或改用本地规则计算：</p>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  <button
+                    type="button"
+                    onClick={() => lastAnswers && handleSubmit(lastAnswers)}
+                    disabled={!lastAnswers}
+                    className="px-4 py-2 rounded-lg text-sm font-medium bg-brand-600 text-white hover:bg-brand-700 disabled:opacity-50"
+                  >
+                    重试
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => lastAnswers && handleFallback(lastAnswers)}
+                    disabled={!lastAnswers}
+                    className="px-4 py-2 rounded-lg text-sm font-medium border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-50"
+                  >
+                    使用本地规则计算
+                  </button>
+                </div>
+              </div>
+            )}
+          </>
+        )}
 
         {/* ── Results ── */}
         {view === "results" && (

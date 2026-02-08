@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "serve out -s -l tcp://0.0.0.0:${PORT:-8080}",
+    "start": "next start -p ${PORT:-8080}",
     "lint": "next lint"
   },
   "dependencies": {

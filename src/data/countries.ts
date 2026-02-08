@@ -38,12 +38,20 @@ function isoToFlag(iso: string): string {
 /** Map JSON worker type strings to our WorkType enum */
 function mapWorkTypes(types: string[]): WorkType[] {
   const map: Record<string, WorkType> = {
-    remote_employee: "overseas_remote_employee",
     freelancer: "freelancer",
     self_employed: "freelancer",
     business_owner: "company_owner",
   };
-  return types.map((t) => map[t]).filter(Boolean);
+  const result: WorkType[] = [];
+  for (const t of types) {
+    if (t === "remote_employee") {
+      result.push("overseas_remote_employee", "domestic_remote_employee");
+    } else {
+      const mapped = map[t];
+      if (mapped) result.push(mapped);
+    }
+  }
+  return Array.from(new Set(result));
 }
 
 /** Translate English restriction strings to Chinese */

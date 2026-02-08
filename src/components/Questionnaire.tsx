@@ -148,8 +148,10 @@ const SECTIONS = [
 /* ──────── main ──────── */
 export default function Questionnaire({
   onSubmit,
+  disabled = false,
 }: {
   onSubmit: (a: UserAnswers) => void;
+  disabled?: boolean;
 }) {
   const [step, setStep] = useState(0);
   const [a, setA] = useState<UserAnswers>(defaults());
@@ -464,7 +466,7 @@ export default function Questionnaire({
             ← 上一步
           </button>
           <button
-            disabled={!canNext()}
+            disabled={!canNext() || disabled}
             className="px-5 sm:px-6 py-3 sm:py-2.5 rounded-lg text-sm font-medium bg-brand-600 text-white
               hover:bg-brand-700 active:bg-brand-800 disabled:opacity-40 disabled:cursor-not-allowed
               transition-colors shadow-sm min-h-[44px]"
