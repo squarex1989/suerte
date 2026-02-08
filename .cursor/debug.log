@@ -1,0 +1,12 @@
+{"location":"page.tsx","message":"setLoading(true)","data":{"timestamp":1770523730145},"hypothesisId":"H3","timestamp":1770523730145}
+{"location":"page.tsx","message":"SpinnerOverlay mounted","data":{},"hypothesisId":"H3","timestamp":1770523730154}
+{"location":"page.tsx","message":"SpinnerOverlay mounted","data":{},"hypothesisId":"H3","timestamp":1770523730150}
+{"location":"page.tsx","message":"spinner computed style","data":{"animationName":"spinner-rotate","animationDuration":"0.8s","animationPlayState":"running","display":"inline-block","className":"loading-spinner inline-block w-8 h-8 border-2 border-brand-500 border-t-transparent rounded-full mb-4","borderTopColor":"rgba(0, 0, 0, 0)","borderBottomColor":"rgb(99, 102, 241)"},"hypothesisId":"H1_H2_H4","timestamp":1770523730151}
+{"location":"page.tsx","message":"spinner computed style","data":{"animationName":"spinner-rotate","animationDuration":"0.8s","animationPlayState":"running","display":"inline-block","className":"loading-spinner inline-block w-8 h-8 border-2 border-brand-500 border-t-transparent rounded-full mb-4","borderTopColor":"rgba(0, 0, 0, 0)","borderBottomColor":"rgb(99, 102, 241)"},"hypothesisId":"H1_H2_H4","timestamp":1770523730154}
+{"location":"page.tsx","message":"prefers-reduced-motion","data":{"reducedMotion":false},"hypothesisId":"H5","timestamp":1770523730151}
+{"location":"page.tsx","message":"prefers-reduced-motion","data":{"reducedMotion":false},"hypothesisId":"H5","timestamp":1770523730154}
+{"location":"page.tsx","message":"keyframes in stylesheets","data":{"foundKeyframes":true},"hypothesisId":"H1","timestamp":1770523730154}
+{"location":"page.tsx","message":"keyframes in stylesheets","data":{"foundKeyframes":true},"hypothesisId":"H1","timestamp":1770523730155}
+{"location":"page.tsx","message":"SpinnerOverlay unmounted","data":{},"hypothesisId":"H3","timestamp":1770523730154}
+{"location":"page.tsx","message":"setLoading(false)","data":{"timestamp":1770523730443},"hypothesisId":"H3","timestamp":1770523730443}
+{"location":"page.tsx","message":"SpinnerOverlay unmounted","data":{},"hypothesisId":"H3","timestamp":1770523730447}
